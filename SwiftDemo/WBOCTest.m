@@ -24,7 +24,6 @@
     NSArray *methods0 = [self findVTableMethods:className0];
     NSArray *methods1 = [self findVTableMethods:className1];
     
-    
     if (methods0.count >= mInx0 &&
         methods1.count >= mInx1) {
     
@@ -50,11 +49,8 @@
                 break;
             }
         }
-    
         return;
     }
-
-    
 }
 
 + (void)readyExchageTest:(id)obj{

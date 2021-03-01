@@ -19,7 +19,6 @@ class ViewController: UIViewController {
         var result = myTest.oriFunc(_name: "before")
         print("return \(result)")
         
-        #warning("自娱自乐可以，在生产环境不要这样做")
         WBOCTest.replace(MyTestClass.self, methodIndex0: 0, withClass: MyTestClass.self, methodIndex1: 1);
         
         result = myTest.oriFunc(_name: "after")
@@ -28,17 +27,18 @@ class ViewController: UIViewController {
 }
 
 class MyTestClass {
-    
+       
     func oriFunc(_name:String) -> String {
         print("call oriFunc \(_name)")
         return "oriFunc "
     }
-    
+
     func repFunc(_name:String) -> String {
         print("call repFunc \(_name)")
         return "repFunc "
     }
 }
+
 
 class SubTestClass : MyTestClass {
     

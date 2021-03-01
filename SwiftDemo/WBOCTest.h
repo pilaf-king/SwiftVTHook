@@ -12,6 +12,9 @@ NS_ASSUME_NONNULL_BEGIN
 @interface WBOCTest : NSObject
 
 + (void)replace:(id)obj0 methodIndex0:(int)mInx0 withClass:(id)obj1 methodIndex1:(int)mInx1;
+
++ (void)replace:(id)class;
+
 @end
 
 NS_ASSUME_NONNULL_END
