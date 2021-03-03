@@ -69,6 +69,9 @@
     }
 }
 
+#warning 编译器能做哪些优化？优化对VTable是否有影响？
+#warning 隐约记得在调研Mach-O时，有的相对地址计算完后很小，不能-linkbase，这里没有做容错，可能会有安全隐患
+#warning 不同版本的Xcode 编译及不同的版本适配，是否会有问题？另外，能否适配__RODATA也没做验证
 + (void)replace:(id)class{
     const struct segment_command_64 *linkedit =  getsegbyname("__LINKEDIT");
     uintptr_t linkBase = linkedit->vmaddr-linkedit->fileoff;
@@ -84,6 +87,7 @@
         struct SwiftMethod *method = (struct SwiftMethod*)(overrideMethodModel.overrideMethod);
         uintptr_t oriIMP = (uintptr_t)method + sizeof(UInt32) + method->Offset - linkBase;
         //目前仅限实例方法生效
+        #warning 编译器会自动生成一些函数，比如我继承了一个类，重写了2个函数，但是重写表中有3个函数，显然有一个不是我们需要的，能否精确识别出来这个函数？目前是通过函数的示例方法来限定的
         if (([self getSwiftMethodKind:method] == SwiftMethodKindMethod ||
              [self getSwiftMethodKind:method] == SwiftMethodKindModify)&&
             [self getSwiftMethodType:method] == SwiftMethodTypeInstance) {
@@ -136,6 +140,7 @@
         short genericSize = [self addPlaceholderWithGeneric:typeOffset];
         if (!hasVtable && !hasOverrideTable ) {continue;}
         
+        #warning typeLocation的计算在hasSingletonMetadataInitialization 和 有泛型的情况下可能会存在问题，因为我修改了SwiftClassTypeNoMethods 结构体，但是后面计算没有做适配修改（先跑通流程再处理）
         uintptr_t typeLocation = typeOffset + sizeof(struct SwiftClassTypeNoMethods) + (hasVtable?4:0) + (hasSingletonMetadataInitialization?12:0) + genericSize + exeHeader;
         
         if ([self hasVTable:baseType]) {
