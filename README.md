@@ -7,5 +7,5 @@ SwiftVTHook 是一种基于Swift的虚函数表的函数hook 方案，目前已�
 目前SwiftVTHook处于理论实验阶段，编译器对Swift的优化影响、泛型、Type结构等还需要进一步完善。
 
 ## demo
-demo 只支持真机arm64架构。建议release模式下进行编译运行。
+demo 只支持真机arm64架构。建议release模式下进行编译运行。由于相对对OC比较熟悉，因此核心代码采用OC编写。
 
