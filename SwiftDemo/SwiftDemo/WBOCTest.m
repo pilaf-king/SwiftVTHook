@@ -298,7 +298,16 @@
     //4字节对齐
     short pandding = (unsigned)-paramsCount & 3;
     
-    return (1 * 4 + 4 + 4 + paramsCount + pandding + 3 * 4 * (requeireCount) + 4);
-}
+    /**
+        
+     16  =  4 + 4 + 2 + 2 + 2 + 2
+     addMetadataInstantiationCache 4
+     addMetadataInstantiationPattern 4
+     GenericParamCount 2
+     GenericRequirementCount 2
+     GenericKeyArgumentCount 2
+     GenericExtraArgumentCount 2
+     */
+    return (16 + paramsCount + pandding + 3 * 4 * (requeireCount) + 4);}
 
 @end
