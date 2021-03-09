@@ -137,11 +137,12 @@
         BOOL hasVtable = [self hasVTable:baseType];
         BOOL hasOverrideTable = [self hasOverrideTable:baseType];
         BOOL hasSingletonMetadataInitialization = [self hasSingletonMetadataInitialization:baseType];
+        BOOL hasResilientSuperclass = [self hasResilientSuperclass:baseType];
         short genericSize = [self addPlaceholderWithGeneric:typeOffset];
         if (!hasVtable && !hasOverrideTable ) {continue;}
         
         #warning typeLocation的计算在hasSingletonMetadataInitialization 和 有泛型的情况下可能会存在问题，因为我修改了SwiftClassTypeNoMethods 结构体，但是后面计算没有做适配修改（先跑通流程再处理）
-        uintptr_t typeLocation = typeOffset + sizeof(struct SwiftClassTypeNoMethods) + (hasVtable?4:0) + (hasSingletonMetadataInitialization?12:0) + genericSize + exeHeader;
+        uintptr_t typeLocation = typeOffset + sizeof(struct SwiftClassTypeNoMethods) + genericSize + (hasResilientSuperclass?4:0)+ (hasSingletonMetadataInitialization?12:0) + (hasVtable?4:0) + exeHeader;
         
         if ([self hasVTable:baseType]) {
             UInt32* methodNum = (UInt32*)typeLocation;
@@ -223,6 +224,11 @@
 
 + (BOOL)hasOverrideTable:(struct SwiftBaseType*)type{
     if ((type->Flag & 0x40000000) == 0x40000000) {return YES;}
+    return NO;
+}
+
++ (BOOL)hasResilientSuperclass:(struct SwiftBaseType*)type{
+    if ((type->Flag & 0x20000000) == 0x20000000) {return YES;}
     return NO;
 }
 
@@ -308,6 +314,7 @@
      GenericKeyArgumentCount 2
      GenericExtraArgumentCount 2
      */
-    return (16 + paramsCount + pandding + 3 * 4 * (requeireCount) + 4);}
+    return (16 + paramsCount + pandding + 3 * 4 * (requeireCount) + 4);
+}
 
 @end
